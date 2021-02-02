@@ -6,16 +6,17 @@ import { Fire } from '../../config'
 
 const Splash = ({navigation}) => {
 	useEffect(() => {
-	const unsub = Fire.auth().onAuthStateChanged(user => {
+		const unsub = Fire.auth().onAuthStateChanged(user => {
 			setTimeout(()=>{
 				if (user) {
 					navigation.replace('MainApp')
 				}else {
 					navigation.replace('GetStarted')
 				}
-			}, 1500)		
-		})
-	}, [])
+			}, 3000)
+		});
+		return () => unsub()
+	}, [navigation])
 	return (
 		<View style= { styles.wrapper }>
 	        <ILLogo/>

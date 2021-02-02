@@ -6,7 +6,7 @@ import BtnIconSend from './BtnIconSend'
 
 const Button = ({ type, title, onPress, icon , disable}) => {
 	if (type === 'button-icon-send') {
-		return <BtnIconSend disable= { disable } />
+		return <BtnIconSend disable= { disable } onPress={onPress} />
 	}
 
 	if (type === 'icon-only') {

@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import Router from './router'
-import FlashMessage from "react-native-flash-message";
+import React from 'react'
+import { LogBox } from 'react-native'
 import { Loading } from './components'
 import { Provider, useSelector } from 'react-redux'
+import Router from './router'
+import FlashMessage from "react-native-flash-message";
 import store from './redux/store'
 
 const MainApp = () => {
 	const stateGlobal= useSelector( state => state)
-	console.log('state global :', stateGlobal)
+  LogBox.ignoreLogs(['Setting a timer'])
   return (
   	<>
     	<NavigationContainer>

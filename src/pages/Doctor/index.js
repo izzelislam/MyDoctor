@@ -9,22 +9,57 @@ import { Fire } from '../../config'
 const Doctor = ({ navigation }) => {
 	const [news, setNews]= useState([])
 	const [doctorCategory, setDoctorCategory]= useState([])
+	const [dok, setDok]= useState([])
 
 	useEffect(() => {
-		Fire.database().ref('/news').once('value')
+		getCategory()
+		getTopRatedDoctor()
+		getNews()
+	}, [])
+
+	const getNews= () => {
+		Fire.database().ref('news/').once('value')
 			.then((res) => {
 				if (res.val()) {
-					setNews(res.val())
+					const dat= res.val()
+					const dataFilter= dat.filter(el => el !== null)
+					setNews(dataFilter)
 				}
 			})
+	}
 
+	const getTopRatedDoctor= () => {
+		Fire.database().ref('doctors/')
+			.orderByChild('rate')
+			.limitToLast(3)
+			.once('value')
+			.then((res) => {
+				if (res.val()) {
+					const oldData= res.val()
+					const data= []
+					Object.keys(oldData).map( key => {
+						data.push({
+							id: key,
+							data: oldData[key],
+						})
+					})
+					setDok(data);
+					console.log('parsing data', dok)
+				}
+			})
+	}
+
+	const getCategory= () => {
 		Fire.database().ref('doctor_category/').once('value')
 			.then( res =>{
 				if (res.val()) {
+					const data= res.val()
+					const filtered= data.filter(el => el !== null)
 					setDoctorCategory(res.val())
 				}
 			})
-	}, [])
+	}
+
 	return (
 		<View style= {styles.page} >
 			<View style= { styles.content }>
@@ -42,7 +77,11 @@ const Doctor = ({ navigation }) => {
 								{
 									doctorCategory.map( item => {
 										return (
-											<DoctorCategory key={ item.id } category={ item.category } onPress= { () => navigation.navigate('ChooseDoctor') } />
+											<DoctorCategory 
+												key={ item.id } 
+												category={ item.category } 
+												onPress= { () => navigation.navigate('ChooseDoctor', item) }
+											/>
 										)
 									})
 								}
@@ -51,14 +90,23 @@ const Doctor = ({ navigation }) => {
 						</ScrollView>
 					</View>
 					<View style= { styles.wrappersection }>
-						<Text style= { styles.sectionlabel }>Top Rated Doctors</Text>
-						<RatedDoctor name="Alexa Rachel" desc="pediatrician" avatar= { DumyDoctor1 } onPress= { () => navigation.navigate('DoctorProfile') } />
-						<RatedDoctor name="Alexa Rachel" desc="pediatrician" avatar= { DumyDoctor1 } onPress= { () => navigation.navigate('DoctorProfile') } />
-						<RatedDoctor name="Alexa Rachel" desc="pediatrician" avatar= { DumyDoctor1 } onPress= { () => navigation.navigate('DoctorProfile') } />
+						<Text style= { styles.sectionlabel }>Top Rated Doctor</Text>
+
+						{ dok.map( (doctor) => {
+							return (
+								<RatedDoctor 
+								key={doctor.id}
+								name={doctor.data.fullName} 
+								desc={doctor.data.profession}
+								avatar= {{uri: doctor.data.photo}} 
+								onPress= { () => navigation.navigate('DoctorProfile', doctor) } />
+							)
+						})}
+
 						<Text style= { styles.sectionlabel }>Good News</Text>
 					</View>
 					{ news.map( item => {
-						return <NewsItem title={item.title} date={item.date} image={{uri:item.image}} />
+						return <NewsItem title={item.title} date={item.date} image={{uri:item.image}} key={item.id} />
 						} ) 
 					}
 				</ScrollView>

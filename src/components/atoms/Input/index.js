@@ -14,7 +14,16 @@ const Input = ({label, value, onChangeText, secureTextEntry, disable}) => {
 	return (
 		<View>
 			<Text style= { styles.label }>{ label }</Text>
-			<TextInput editable={!disable} selectTextOnFocus={!disable} secureTextEntry={secureTextEntry} onFocus={onFocusForm} onBlur={onBlurForm} style={ styles.input(border) } value={value} onChangeText={onChangeText} />
+			<TextInput
+				editable={!disable}
+				selectTextOnFocus={!disable}
+				secureTextEntry={secureTextEntry}
+				onFocus={onFocusForm}
+				onBlur={onBlurForm}
+				style={ styles.input(border) }
+				value={value}
+				onChangeText={onChangeText}
+			/>
 		</View>
 	)
 }

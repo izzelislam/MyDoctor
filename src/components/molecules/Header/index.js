@@ -5,9 +5,9 @@ import { Gap, Button } from '../../../components'
 import { colors } from '../../../utils'
 import DarkProfile from './DarkProfile'
 
-const Header = ({ onPress, title, type }) => {
+const Header = ({ onPress, title, type, desc, avatar }) => {
 	if (type === 'dark-profile') {
-		return <DarkProfile onPress= { onPress } />
+		return <DarkProfile onPress= { onPress } title={title} desc={desc} avatar={avatar}/>
 	}
 	return (
 		<View style= { styles.container(type) }>
@@ -35,6 +35,7 @@ const styles= {
 		textAlign: 'center',
 		fontSize: 20,
 		fontFamily: 'Nunito-SemiBold',
-		color: type === 'dark' ? colors.white : colors.text.primary
+		color: type === 'dark' ? colors.white : colors.text.primary,
+		textTransform: 'capitalize'
 	})
 }

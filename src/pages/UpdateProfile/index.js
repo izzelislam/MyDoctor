@@ -23,6 +23,7 @@ const UpdateProfile = ({ navigation }) => {
 				const data= res
 				setPhoto({uri: res.photo})
 				setProfile(data)
+				console.log(profile)
 			})
 	}, [])
 
